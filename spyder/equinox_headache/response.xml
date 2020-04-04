@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BatchResponse xmlns="http://cb4.creditinfosolutions.com/BatchUploader/Batch">
+  <Header>
+    <BatchId>271697313</BatchId>
+    <State>Finished</State>
+    <BeginTimeStamp>2017-10-30T17:14:38.4518469Z</BeginTimeStamp>
+    <TimeStamp>2017-10-30T17:14:40.8581012Z</TimeStamp>
+    <FinishTimeStamp>2017-10-30T17:14:40.8581012Z</FinishTimeStamp>
+    <Duration>2.4063</Duration>
+    <Identifier>8c777917e6b7403dbb8e56400940b5a2</Identifier>
+    <Subscriber>AdminSubscriber</Subscriber>
+    <SubscriberUnit>AdminSubscriberUnit</SubscriberUnit>
+    <CommandsUploaded>1</CommandsUploaded>
+    <CommandsCompleted>1</CommandsCompleted>
+  </Header>
+  <Commands>
+    <Command identifier="c50f62f741df45f79e74ba80a405f469">
+      <Cis.CB4.Projects.GE.CIG.Reports.Body.Products.PersonalInformation.Response>
+        <PersonalData>
+          <NationalID>01012002417</NationalID>
+          <Firstname>ირაკლი</Firstname>
+          <Surname>კახელი</Surname>
+          <Gender>Gender.Male</Gender>
+          <BirthDate>1978-04-03T00:00:00Z</BirthDate>
+        </PersonalData>
+        <Addresses>
+          <PermanentResidence>
+            <AddressBaseChoice>
+              <Structured>
+                <Country>CountryCodes.GE</Country>
+                <City>თბილისი</City>
+                <Street>ვაზისუბანი მე-2 მკრნი</Street>
+                <BuildingNumber>---</BuildingNumber>
+                <FlatFloorNumber>---</FlatFloorNumber>
+              </Structured>
+            </AddressBaseChoice>
+          </PermanentResidence>
+          <Factual>
+            <AddressBaseChoice>
+              <Structured>
+                <Country>CountryCodes.GE</Country>
+                <City>თბილისი</City>
+                <Street>ვაზისუბანი მე-2 მკრნი</Street>
+              </Structured>
+            </AddressBaseChoice>
+          </Factual>
+          <Postal>
+            <AddressBaseChoice>
+              <Structured>
+                <PostalCode>1234</PostalCode>
+                <Country>CountryCodes.GE</Country>
+                <City>თბილისი</City>
+                <Street>ვაზისუბანი მე-2მკრნი კ.18.ბ.15</Street>
+                <BuildingNumber>0</BuildingNumber>
+              </Structured>
+            </AddressBaseChoice>
+          </Postal>
+          <Employer>
+            <AddressBaseChoice>
+              <FreeText>
+                <AddressValue>თბილისი   ქუჩა/კვარტალი: ვაზისუბნის მე-2 მკრ   სახლის/კორპუსის ნომერი: 18  ბინა: 15</AddressValue>
+              </FreeText>
+            </AddressBaseChoice>
+          </Employer>
+        </Addresses>
+        <Contacts>
+          <Phone>2236574</Phone>
+          <CellPhone>591250052</CellPhone>
+          <Email>ikakheli@mail.ru</Email>
+        </Contacts>
+        <ReportIssueDate>2017-10-30T17:14:38.8893442Z</ReportIssueDate>
+        <ReportStatus>ReportStatus.Ok</ReportStatus>
+      </Cis.CB4.Projects.GE.CIG.Reports.Body.Products.PersonalInformation.Response>
+    </Command>
+  </Commands>
+</BatchResponse>

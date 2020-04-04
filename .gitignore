@@ -1,0 +1,15 @@
+__pycache__/
+.vscode/
+wrk/
+x/
+**/scrsht/
+**/geckodriver.log
+**/tmp*
+**/.cache/
+
+#spyder
+**/untitled*
+/spyder/**/.spyproject
+/spyder/idiotic_table/
+
+

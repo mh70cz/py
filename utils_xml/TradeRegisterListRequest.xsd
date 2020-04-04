@@ -1,0 +1,688 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xs:schema xmlns="http://creditinfo.com/schemas/2012/09/MultiConnector/Connectors/CZE/TradeRegister/List/Request" xmlns:xs="http://www.w3.org/2001/XMLSchema" id="request" targetNamespace="http://creditinfo.com/schemas/2012/09/MultiConnector/Connectors/CZE/TradeRegister/List/Request" elementFormDefault="qualified">
+
+  <xs:element name="request">
+
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice>
+          <xs:element name="BusinessEntity">
+            <xs:annotation>
+              <xs:documentation xml:lang="cs">Subjekt</xs:documentation>
+              <xs:documentation xml:lang="en">Business Entity</xs:documentation>
+              <!--FOP+PO (Entrepreneur or Legal Person)-->
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:choice>
+                  <xs:element name="RegistrationNumber">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="en">Registration Number</xs:documentation>
+                      <xs:documentation xml:lang="cs">IČO</xs:documentation>
+                      <!--discrepancy with source's documentation, documentation requires exactly 8, if shorter left padded with zeros-->
+                    </xs:annotation>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:pattern value="[0-9]{2,8}"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:element>
+                  <xs:element name="BusinessNameAddress" minOccurs="1">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="SubjectName" minOccurs="0" maxOccurs="1">
+                          <xs:annotation>
+                            <xs:documentation xml:lang="cs">Název subjektu</xs:documentation>
+                            <xs:documentation xml:lang="en">Subject name</xs:documentation>
+                            <!--Subjekt nebo název subjektu je zjednodušené označení pro jméno, pod kterým subjekt vystupuje a je pod ním evidován v Živnostenském rejstříku. Podle typu
+                    subjektu se může jednat o obchodní firmu (subjekty zapsané v obchodním rejstříku), název právnické osoby (právnické osoby nezapsané v obchodním rejstříku) nebo jméno a
+                    příjmení fyzické osoby včetně případného dodatku (fyzické osoby nezapsané v obchodním rejstříku).-->
+                          </xs:annotation>
+                          <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                              <xs:minLength value="2"/>
+                              <xs:maxLength value="255"/>
+                            </xs:restriction>
+                          </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="NameSearchType" type="NameSearchType" minOccurs="0" maxOccurs="1"/>
+                        <xs:element name="Address" minOccurs="0">
+                          <xs:complexType>
+                            <xs:sequence>
+                              <xs:element name="District" type="Districts"/>
+                              <xs:element name="Municipality" type="Municipality"/>
+                              <xs:element name="PartOfMunicipality" minOccurs="0" type="PartOfMunicipality"/>
+                              <xs:element name="Street" type="Street" minOccurs="0"/>
+                              <xs:element name="OrientationNumber" type="OrientationNumber" minOccurs="0"/>
+                              <xs:element name="Sign" type="Sign" minOccurs="0"/>
+                              <xs:element name="HouseNumber" type="HouseNumber" minOccurs="0"/>
+                            </xs:sequence>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:choice>
+                <xs:element name="SubjectRole" type="SubjectRolesBusinessEntity" minOccurs="0" maxOccurs="1"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="Individual">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element minOccurs="0" name="Name">
+                  <xs:annotation>
+                    <xs:documentation xml:lang="cs">Jméno</xs:documentation>
+                    <xs:documentation xml:lang="en">Name</xs:documentation>
+                  </xs:annotation>
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:minLength value="2"/>
+                      <xs:maxLength value="24"/>
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:element>
+                <xs:element name="Surname">
+                  <xs:annotation>
+                    <xs:documentation xml:lang="cs">Příjmení</xs:documentation>
+                    <xs:documentation xml:lang="en">Surname</xs:documentation>
+                  </xs:annotation>
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:minLength value="2"/>
+                      <xs:maxLength value="35"/>
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:element>
+                <xs:element name="DateOfBirth" type="xs:date" minOccurs="1" maxOccurs="1">
+                  <xs:annotation>
+                    <xs:documentation xml:lang="cs">Datum narození</xs:documentation>
+                    <xs:documentation xml:lang="en">Date of birth</xs:documentation>
+                  </xs:annotation>
+                </xs:element>
+                <xs:element name="SubjectRole" type="SubjectRolesIndividual" minOccurs="0" maxOccurs="1"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+        <xs:element name="ActualOnly" minOccurs="0" maxOccurs="1">
+          <xs:simpleType>
+            <xs:annotation>
+              <xs:documentation xml:lang="cs">Vyhledávat údaje</xs:documentation>
+              <xs:documentation xml:lang="en">Search criteria</xs:documentation>
+              <!--Vyhledá pouze aktuální společnosti a vazby [true] nebo i historická data [false]
+                Only current companies and relations will be looked up [true] or all historical data will be looked up [false]-->
+            </xs:annotation>
+            <xs:restriction base="xs:boolean">
+            <xs:annotation>
+              <xs:documentation xml:lang="cs">[true] Pouze platné ; [false] Platné i neplatné</xs:documentation>
+              <xs:documentation xml:lang="en">[true] Actual only ; [false] All historical data</xs:documentation>
+              <!--Default: true-->
+            </xs:annotation>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>                
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:simpleType name="SubjectRolesBusinessEntity">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs"/>
+          <xs:documentation xml:lang="en"/>
+          <!--empty value to list all relevant options-->
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="S">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Statutární orgán právnická osoba</xs:documentation>
+          <xs:documentation xml:lang="en">Statutory representative legal person</xs:documentation>          
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="P">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Podnikatel</xs:documentation>
+          <xs:documentation xml:lang="en">Business entity</xs:documentation>
+          <!--Default vaulue-->
+<!--FOP+PO (Entrepreneur or Legal Person) "Podnikatel"  ponecháno z důvodu "kompatability"-->
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="SubjectRolesIndividual">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs"/>
+          <xs:documentation xml:lang="en"/>
+          <!--Default empty value to list all relevant options-->
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="S">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Statutární orgán</xs:documentation>
+          <xs:documentation xml:lang="en">Statutory body</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="P">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Podnikatel</xs:documentation>
+          <xs:documentation xml:lang="en">Business entity</xs:documentation>
+          <!--FOP+PO (Entrepreneur or Legal Person) "Podnikatel"  ponecháno z důvodu "kompatability"-->
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="O">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Vedoucí organizační složky</xs:documentation>
+          <xs:documentation xml:lang="en">Branch manager</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Z">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Odpovědný zástupce</xs:documentation>
+          <xs:documentation xml:lang="en">Responsible representative</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="D">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Pokračovatel</xs:documentation>
+          <xs:documentation xml:lang="en">Successor</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="ZS">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Osoba zastupující právnickou osobu</xs:documentation>
+          <xs:documentation xml:lang="en">Person representing a legal person</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+
+  </xs:simpleType>
+
+  <xs:simpleType name="Districts">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs"/>
+          <xs:documentation xml:lang="en"/>
+          <!--Default empty value to list all districts / Defaultní prázná hodnota pro výpis všech okresů-->
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3201">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Benešov</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3202">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Beroun</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3701">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Blansko</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3702">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Brno-město</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3703">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Brno-venkov</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3801">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Bruntál</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3704">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Břeclav</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3501">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Česká Lípa</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3301">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">České Budějovice</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3302">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Český Krumlov</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3502">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Děčín</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3401">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Domažlice</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3802">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Frýdek-Místek</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3601">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Havlíčkův Brod</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3100">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Hlavní město Praha</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3706">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Hodonín</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3602">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Hradec Králové</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3402">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Cheb</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3503">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Chomutov</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3603">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Chrudim</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3504">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Jablonec nad Nisou</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3811">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Jeseník</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3604">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Jičín</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3707">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Jihlava</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3303">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Jindřichův Hradec</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3403">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Karlovy Vary</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3803">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Karviná</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3203">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Kladno</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3404">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Klatovy</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3204">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Kolín</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3708">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Kroměříž</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3205">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Kutná Hora</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3505">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Liberec</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3506">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Litoměřice</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3507">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Louny</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3206">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Mělník</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3207">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Mladá Boleslav</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3508">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Most</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3605">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Náchod</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3804">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Nový Jičín</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3208">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Nymburk</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3805">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Olomouc</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3806">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Opava</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3807">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Ostrava-město</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3606">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Pardubice</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3304">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Pelhřimov</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3305">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Písek</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3406">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Plzeň-jih</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3405">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Plzeň-město</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3407">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Plzeň-sever</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3209">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Praha-východ</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3210">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Praha-západ</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3306">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Prachatice</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3709">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Prostějov</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3808">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Přerov</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3211">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Příbram</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3212">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Rakovník</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3408">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Rokycany</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3607">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Rychnov nad Kněžnou</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3608">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Semily</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3409">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Sokolov</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3307">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Strakonice</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3609">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Svitavy</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3809">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Šumperk</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3308">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Tábor</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3410">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Tachov</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3509">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Teplice</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3610">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Trutnov</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3710">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Třebíč</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3711">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Uherské Hradiště</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3510">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Ústí nad Labem</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3611">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Ústí nad Orlicí</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3810">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Vsetín</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3712">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Vyškov</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3705">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Zlín</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3713">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Znojmo</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="3714">
+        <xs:annotation>
+          <xs:documentation xml:lang="cs">Žďár nad Sázavou</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="NameSearchType">
+    <xs:annotation>
+      <xs:documentation xml:lang="cs">Typ hledání v názvu</xs:documentation>
+      <xs:documentation xml:lang="en">Name search type</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:boolean">
+      <xs:annotation>
+        <xs:documentation xml:lang="cs">[true] Od začátku ;  [false] Dle začátku slov</xs:documentation>
+        <xs:documentation xml:lang="en">[true] From the beginning ; [false] From the beginning of each word</xs:documentation>
+        <!--default: false-->
+      </xs:annotation>
+    </xs:restriction>    
+  </xs:simpleType>
+
+  <xs:simpleType name="Municipality">
+    <xs:annotation>
+      <xs:documentation xml:lang="cs">Obec</xs:documentation>
+      <xs:documentation xml:lang="en">Municipality</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:minLength value="3"/>
+      <xs:maxLength value="48"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="PartOfMunicipality">
+    <xs:annotation>
+      <xs:documentation xml:lang="cs">Část obce</xs:documentation>
+      <xs:documentation xml:lang="en">Part of municipality</xs:documentation>
+      <!--evidenční jednotka v rámci obce, vytvářená objekty s čísly popisnými resp. evidenčními, přidělenými v jedné číselné řadě; nemá jako evidenční jednotka vlastní
+        hranici-->
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:minLength value="3"/>
+      <xs:maxLength value="48"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="Street">
+    <xs:annotation>
+      <xs:documentation xml:lang="cs">Ulice</xs:documentation>
+      <xs:documentation xml:lang="en">Street</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:minLength value="3"/>
+      <xs:maxLength value="48"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="OrientationNumber">
+    <xs:annotation>
+      <xs:documentation xml:lang="cs">Číslo orienatční</xs:documentation>
+      <xs:documentation xml:lang="en">Orientation Number</xs:documentation>
+      <!--číslo, kterým mohou být označeny budovy k usnadnění orientace v jednotlivých ulicích a jiných veřejných prostranstvích i vedle čísla popisného (orientační číslo není
+        součástí údajů o budově v katastru nemovitostí) english: House orientation number-->
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-9]{1,5}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="Sign">
+    <xs:annotation>
+      <xs:documentation xml:lang="cs">Znak</xs:documentation>
+      <xs:documentation xml:lang="en">Sign</xs:documentation>
+      <!--znak orientačního čísla; english: indicative sign of house orientation number; malý znak české abecedy bez diakritických znamének použitý jako dodatek čísla
+        orientačního-->
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="HouseNumber">
+    <xs:annotation>
+      <xs:documentation xml:lang="cs">Číslo popisné</xs:documentation>
+      <xs:documentation xml:lang="en">House number</xs:documentation>
+      <!--Ve zdroji je "číslo domovní", což je terminologicky nevhodné - číslo domovní - souhrnný pojem označující číslo popisné a číslo evidenční)
+        Správný název je "Číslo popisné" en: House number - číselný prostorový identifikátor stavebního objektu jedinečný v rámci části obce; číslo popisné je přidělováno obcí-->
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-9]{1,10}"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
+

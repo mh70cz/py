@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- CZE_TradeRegister_List  7ffccca6-52f8-4c14-895a-e87245c6854d -->
+<xs:schema id="response" targetNamespace="http://creditinfo.com/schemas/2012/09/MultiConnector/Connectors/CZE/TradeRegister/List/Response" elementFormDefault="qualified"
+    xmlns="http://creditinfo.com/schemas/2012/09/MultiConnector/Connectors/CZE/TradeRegister/List/Response" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="response"   >
+        <xs:complexType    >
+            <xs:sequence>
+                <xs:element name="SubjectName" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="cs">Jméno subjektu</xs:documentation>
+                        <xs:documentation xml:lang="en">Subject name</xs:documentation>
+                        <xs:documentation/>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="SubjectType" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="cs">Typ subjektu</xs:documentation>
+                        <xs:documentation xml:lang="en">Subject type</xs:documentation>
+                        <xs:documentation/>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="Address" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="cs">Adresa</xs:documentation>
+                        <xs:documentation xml:lang="en">Address</xs:documentation>
+                        <xs:documentation/>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="OnSearchedAddress" type="xs:string"  minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="cs">Na hledané adrese</xs:documentation>
+                        <xs:documentation xml:lang="en">On searched address</xs:documentation>
+                        <xs:documentation/>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="SubjectRole" type="SubjectRoles"/>
+                <xs:element name="IndividualRole" type="xs:string" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="cs">Role osoby</xs:documentation>
+                        <xs:documentation xml:lang="en">Individual role</xs:documentation>
+                        <xs:documentation/>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="RegistrationNumber" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="cs">IČO</xs:documentation>
+                        <xs:documentation xml:lang="en">Registration number</xs:documentation>
+                        <xs:documentation/>
+                    </xs:annotation>
+                </xs:element>
+
+                <xs:element name="IDBusinessEntity" type="xs:string" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                        <xs:documentation>IDICO basis for detail request, not visible in UI</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="IDIndividual" type="xs:string" minOccurs="0" maxOccurs="1">
+                    <xs:annotation>
+                        <xs:documentation>IDOSOBY basis for detail request, not visible in UI</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="ActualStatementAvailable" type="xs:boolean">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="cs">Výpis platných je k dispozici</xs:documentation>
+                        <xs:documentation xml:lang="en">Actual statement is available</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="FullStatementAvailable" type="xs:boolean">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="cs">Úplný výpis je k dispozici</xs:documentation>
+                        <xs:documentation xml:lang="en">Full statement is available</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="SubjectRoles">
+        <xs:annotation>
+            <xs:documentation xml:lang="cs">Role subjektu</xs:documentation>
+            <xs:documentation xml:lang="en">Subject role</xs:documentation>
+            <xs:documentation/>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="">
+                <xs:annotation>
+                    <xs:documentation xml:lang="cs"/>
+                    <xs:documentation xml:lang="en"/>
+                    <xs:documentation>return this (i.e. empty) value if the response from the source is not in the enumeration</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="S">
+                <xs:annotation>
+                    <xs:documentation xml:lang="cs">Statutární orgán</xs:documentation>
+                    <xs:documentation xml:lang="en">Statutory body</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="P">
+                <xs:annotation>
+                    <xs:documentation xml:lang="cs">Podnikatel</xs:documentation>
+                    <xs:documentation xml:lang="en">Business entity</xs:documentation>
+                    <xs:documentation>FOP+PO (Entrepreneur or Legal Person) "Podnikatel"  ponecháno z důvodu "kompatability"</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="O">
+                <xs:annotation>
+                    <xs:documentation xml:lang="cs">Vedoucí organizační složky</xs:documentation>
+                    <xs:documentation xml:lang="en">Branch manager</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="Z">
+                <xs:annotation>
+                    <xs:documentation xml:lang="cs">Odpovědný zástupce</xs:documentation>
+                    <xs:documentation xml:lang="en">Responsible representative</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="D">
+                <xs:annotation>
+                    <xs:documentation xml:lang="cs">Pokračovatel</xs:documentation>
+                    <xs:documentation xml:lang="en">Successor</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="ZS">
+                <xs:annotation>
+                    <xs:documentation xml:lang="cs">Osoba zastupující právnickou osobu</xs:documentation>
+                    <xs:documentation xml:lang="en">Person representing a legal person</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+
+</xs:schema>

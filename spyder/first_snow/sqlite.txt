@@ -1,0 +1,64 @@
+
+
+How to install SQLite 3.17.0 on Ubuntu 16.04
+
+sudo add-apt-repository ppa:jonathonf/backports
+
+sudo apt-get update && sudo apt-get install sqlite3
+
+How to uninstall SQLite from Ubuntu
+
+sudo apt-get remove sqlite3
+
+---
+Table urls 
+Field 	     Meaning
+id 	         The table’s primary key. This is used in a lot of other tables to reference this table.
+url 	         Stores a unique visited URL.
+title 	     Stores the URLs page title.
+visit_count 	Stores the total visit count for this URL.
+typed_count 	Stores the number of times the URL was typed manually.
+last_visit_time 	Stores the last time the URL was visited. This is stored in Google’s own variation of time.
+hidden 	    Indicates if the URL will be displayed by the autocomplete function. A value of 1 will keep it hidden and 0 will display it.
+favicon_id 	A foreign key to the favicon table which stores the favicon for each URL.
+
+
+
+Table visits
+Field 	Meaning
+id 	The table’s primary key.
+url 	Stores a foreign key to the urls table.
+visit_time 	Stores the time the URL was visited in Google’s own variation of time.
+from_visit 	Stores the id from where the URL came from originally. If the URL does not have a referring URL this value is 0.
+transition 	Shows how the URL has been accessed. Unlike Firefox which just gives a number to represent the type of transition, Chrome has some additional information such as whether or not this was a client or server redirect and if this is a beginning or end of a navigation chain. The transition is a long number, so to extract just the transition type number the variable CORE_MASK (0xFF) has to be used to AND with the transition value.
+
+There are 11 page transition types, such as 0 – user followed a link, 1 – user typed in the URL and 6 – this is the user’s homepage/startpage.
+segment_id 	Stores the segment id. It is not clear what ‘segments’ are. There are tables called segments and segment_usage also in history, and they appear to store the domain names of accessed URLs along with a total visit count.
+
+
+The timestamp in the visit table is formatted as the number of microseconds since midnight UTC of 1 January 1601, 
+
+
+page transition types
+    LINK. User go to the page by clicking a link.
+    TYPED. User typed the URL in the URL bar.
+    AUTO_BOOKMARK. User got to this page through a suggestion in the UI, for example,through the destinations page
+    AUTO_SUBFRAME. Any content that is automatically loaded in a non-toplevel frame. User might not realize this is a separate frame so he might not know he browsed there.
+    MANUAL_SUBFRAME. For subframe navigations that are explicitly requested by the user and generate new navigation entries in the back/forward list.
+    GENERATED. User got to this page by typing in the URL bar and selecting an entry that did not look like a URL.
+    START_PAGE. The user's start page or home page or URL passed along the command line (Chrome started with this URL from the command line)
+    FORM_SUBMIT. The user filled out values in a form and submitted it.
+    RELOAD. The user reloaded the page, whether by hitting reload, enter in the URL bar or by restoring a session.
+    KEYWORD. The url was generated from a replaceable keyword other than the default search provider
+    KEYWORD_GENERATED. Corresponds to a visit generated for a keyword.
+---
+
+PRAGMA table_info(table_name)
+SELECT * FROM Table_Name LIMIT 5;
+
+list of tables:
+SELECT name FROM sqlite_master WHERE type='table'; 
+
+list of temporary tables:
+SELECT name FROM sqlite_temp_master WHERE type='table';
+
