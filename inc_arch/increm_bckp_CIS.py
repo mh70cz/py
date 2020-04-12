@@ -73,8 +73,8 @@ file_counter = 0
 def haf():
 
     do_bck(rootFolders_oneD, backup_folder_oneD)
-    # do_bck(rootFolders_CIS_NB, backup_folder_CIS_NB)
-    # do_bck(rootFolders_M, backup_folder_M, 16_000_000)
+    do_bck(rootFolders_CIS_NB, backup_folder_CIS_NB)
+    do_bck(rootFolders_M, backup_folder_M, 12_000_000)
 
     for msg in error_log:
         pass
@@ -185,7 +185,7 @@ def do_bck(rootFolders, backup_folder, size_limit=SIZE_LIMIT_DEFAULT):
                     if not os.path.exists(dst_folder):
                         os.makedirs(dst_folder)
                     try:
-                        # shutil.copy2(path, dst_path)
+                        shutil.copy2(path, dst_path)
                         # import time; time.sleep(0.05)
                         pass
                     except Exception as e:
