@@ -30,6 +30,8 @@ rootFolders_CIS_NB = [
     r"C:\Users\m.houska\Documents\Templates",
     r"C:\Users\m.houska\Documents\SQL Server Management Studio",
     r"C:\Users\m.houska\Documents\Visual Studio 2015\Projects",
+    #r"C:\git",
+    #r"C:\git_ci",
 ]
 backup_folder_CIS_NB = r"C:\Users\m.houska\OneDrive\ZZ-Archive\CIS_increm"
 
@@ -74,7 +76,7 @@ def haf():
 
     do_bck(rootFolders_oneD, backup_folder_oneD)
     do_bck(rootFolders_CIS_NB, backup_folder_CIS_NB)
-    do_bck(rootFolders_M, backup_folder_M, 12_000_000)
+    # do_bck(rootFolders_M, backup_folder_M, 12_000_000)
 
     for msg in error_log:
         pass
@@ -95,17 +97,23 @@ def save_and_backup_logs(folder_logs, backup_folder_logs):
     )
     copy_log_path = folder_logs + "\\" + "copy_log_" + now.strftime("%Y-%m-%d") + ".txt"
 
-    if not os.path.exists(folder_logs):
-        os.makedirs(folder_logs)
+    try:
+        if not os.path.exists(folder_logs):
+            os.makedirs(folder_logs)
 
-    with open(error_log_path, "w") as f:
-        f.write("\n".join(error_log))
+        with open(error_log_path, "w") as f:
+            f.write("\n".join(error_log))
 
-    with open(copy_log_path, "w") as f:
-        f.write("\n".join(copy_log))
+        with open(copy_log_path, "w") as f:
+            f.write("\n".join(copy_log))
 
-    if not os.path.exists(backup_folder_logs):
-        os.makedirs(backup_folder_logs)
+        if not os.path.exists(backup_folder_logs):
+            os.makedirs(backup_folder_logs)
+    except Exception as e:
+            msg = "some problem ({0}) while writing: {1} ".format(e.args[1], str(f))
+            print(msg)
+
+
 
     log_paths = [error_log_path, copy_log_path]
     for path in log_paths:
@@ -173,7 +181,7 @@ def do_bck(rootFolders, backup_folder, size_limit=SIZE_LIMIT_DEFAULT):
                         continue
 
                     if size > size_limit:
-                        msg = "file {0} is to big ({1})  ".format(path, size)
+                        msg = "file {0} is too big ({1})  ".format(path, size)
                         # print(msg)
                         error_log.append(msg)
                         continue
