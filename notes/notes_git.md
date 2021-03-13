@@ -27,7 +27,7 @@ problem s relative paths ve windows (funguje s ./path) - viz nize
 
 
 
-zobrazeni 
+zobrazeni historie
 
     git log  <file_name>
 
@@ -41,3 +41,27 @@ first
 ```
 C:\Users\m.houska\Documents\_CIS\Toyota\CZ\reports\VariantyNabidek>git show 90b363f7f3b79ed7422739be034569005afec067:./VariantyNabidek.report > ./VariantyNabidek_original.report
 ```
+
+## Remote "local" bare repo
+
+http://www.thehorrors.org.uk/snippets/git-local-filesystem-remotes/
+
+
+vytvoreni remote "local" bare repo bare repo:
+cd c:\Users\m.houska\OneDrive\CIS\git_bare
+
+    git init --bare ci.git
+
+V lokalnim repu
+
+    git remote add origin /c/Users/m.houska/OneDrive/CIS/git_bare/ci.git
+    git git push origin master
+
+Remove remote, show remote 
+
+    $ git remote rm destination  # nesmaze "vzdalene" repo, jen odpoji
+    $ git remote -v
+
+##  Pridani jen modifikovanych souboru
+(ignoruje untracked)  
+git add -u 
