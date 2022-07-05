@@ -44,8 +44,8 @@ pdf_redactor.redactor(options)
 with open(REDACTED_FILE_PATH, mode='rb') as fr:
     s = fr.read()
 
-s = s.replace(b"15.07",b"22.07")
-s = s.replace(b"17.07",b"24.07")
+s = s.replace(b"15.07",b"10.09")
+s = s.replace(b"17.07",b"12.09")
 
 with open(REPLACED_FILE_PATH, mode='wb') as fw:
     fw.write(s)
