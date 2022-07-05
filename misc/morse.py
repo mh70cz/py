@@ -63,7 +63,7 @@ TAP_CODE_DICT = {'A': '. .',
 TAP_DURATION_DICT = {".": 1, 
                "signal_pause": 1, 
                " ": 2 , # halfsymbol_separator i.e. inner pause
-               "symbol_pause": 3,
+               "symbol_pause": 4,
                "/": 7, # word pause
                 }
 # %%
