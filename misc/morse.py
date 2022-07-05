@@ -2,6 +2,7 @@
 # %%
 # signal "." or "-"
 # symbol sequence of signals e.g. letter 'J':'.---'
+# https://morsecode.world/international/timing.html
 
 # TAP CODE
 # signal "." or halfsymbol_separator " "
@@ -31,6 +32,7 @@ MORSE_DURATION_DICT = {".": 1,
                "symbol_pause": 3,
                "/": 7, # word pause
                 }
+
 TAP_CODE_DICT = {'A': '. .',
  'B': '. ..',
  'C': '. ...',
@@ -117,28 +119,28 @@ def tap_duration(tap_message):
     for symbol in tap_message:
         if symbol == "/":
             duration += TAP_DURATION_DICT['/']
-            print(f"{symbol=} {duration=}") 
+            # print(f"{symbol=} {duration=}") 
             first_symbol_in_word = True
         else:
             if not first_symbol_in_word:
                 duration += TAP_DURATION_DICT["symbol_pause"]  
-                print(f"{symbol=} {duration=}")  
+                # print(f"{symbol=} {duration=}")  
             else:
-                print(f"{symbol=} {duration=}") 
+                # print(f"{symbol=} {duration=}") 
                 first_symbol_in_word = False     
             first_signal_in_halfsymbol = True
             for signal in symbol:
                 if signal == " ":
                     duration += TAP_DURATION_DICT[' ']
-                    print(f"{symbol=}  {signal=} {first_signal_in_halfsymbol= } {duration=}")
+                    # print(f"{symbol=}  {signal=} {first_signal_in_halfsymbol= } {duration=}")
                     first_signal_in_halfsymbol = True
                 else:
                     duration += TAP_DURATION_DICT['.']
                     if not first_signal_in_halfsymbol:
                         duration += TAP_DURATION_DICT['signal_pause']
-                        print(f"{symbol=}  {signal=} {first_signal_in_halfsymbol= } {duration=}")
+                        # print(f"{symbol=}  {signal=} {first_signal_in_halfsymbol= } {duration=}")
                     else:
-                        print(f"{symbol=}  {signal=} {first_signal_in_halfsymbol= } {duration=}")
+                        # print(f"{symbol=}  {signal=} {first_signal_in_halfsymbol= } {duration=}")
                         first_signal_in_halfsymbol = False
 
     return(duration)    
