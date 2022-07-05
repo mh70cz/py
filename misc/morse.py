@@ -87,7 +87,8 @@ def morse_duration(morse_message):
                 duration += MORSE_DURATION_DICT["symbol_pause"]  
                 # print(f"{symbol=} {duration=}")  
             else:
-                first_symbol_in_word = False                     
+                # print(f"{symbol=} {duration=}")                    
+                first_symbol_in_word = False   
 
             first_signal_in_symbol = True
             for signal in symbol:
