@@ -64,13 +64,12 @@ MORSE_DURATION_DICT = {
     "/": 7,  # word pause
 }
 
+DEFAULT_FILL_IN_SYMBOL = ".-.-.-"  # . (dot)
 
-def txt_to_morse(txt_message, fill_in_symbol=None):
+def txt_to_morse(txt_message, fill_in_symbol=DEFAULT_FILL_IN_SYMBOL):
     """ 
     
     """
-    if fill_in_symbol is None:
-        fill_in_symbol = ".-.-.-"  # . (dot)
     txt = txt_message.upper()
     morse_message = [MORSE_CODE_DICT.get(c, fill_in_symbol) for c in txt]
     return morse_message
