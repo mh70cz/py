@@ -2,7 +2,7 @@
 # symbol: 
 #     sequence of signals e.g. '.---'  (letter 'J')
 #     word separator "/"
-# morse message: sequence of symbols and separators
+# morse message: sequence (list) of symbols 
 # timing as of: https://morsecode.world/international/timing.html
 
 import time
@@ -64,7 +64,8 @@ MORSE_DURATION_DICT = {
     "-": 3,  # dah
     "signal_pause": 1,  # [dit|dah]-[dit|dah] pause
     "symbol_pause": 3, # symbol separator
-    "word_pause": 7,  # word separator
+    "word_pause": 1,  # word separator "/" is treated as a symbol
+    # total length  symbol_pause + word_pause + symbol_pause = 7
 }
 
 DEFAULT_FILL_IN_SYMBOL = ".-.-.-"  # . (dot)
@@ -80,33 +81,35 @@ def txt_to_morse(txt_message, fill_in_symbol=DEFAULT_FILL_IN_SYMBOL):
 
 def message_duration(morse_message):
     """
-    relative morse message duration
+    morse message relative duration
     """
     duration = 0
-    first_symbol_in_word = True
-    for symbol in morse_message:
-        if symbol == "/":
-            duration += MORSE_DURATION_DICT["word_pause"]
-            # print(f"{symbol=} {duration=}")
-            first_symbol_in_word = True
-        else:
-            if not first_symbol_in_word:
-                duration += MORSE_DURATION_DICT["symbol_pause"]
-                # print(f"{symbol=} {duration=}")
+    symbol = morse_message[:1][0]
+    duration += symbol_duration(symbol)
+    for symbol in morse_message[1:]:
+        duration += MORSE_DURATION_DICT["symbol_pause"]  
+        duration += symbol_duration(symbol)
+    return duration
+
+
+def symbol_duration(symbol):
+    """
+    morse symbol relative duration
+    """
+
+    duration = 0
+    if symbol == "/":
+        duration += MORSE_DURATION_DICT["word_pause"]
+    else:
+        first_signal_in_symbol = True
+        for signal in symbol:            
+            if signal not in [".","-"]:
+                raise ValueError(f"{signal} is wrong signal")
+            duration += MORSE_DURATION_DICT[signal]
+            if not first_signal_in_symbol:
+                duration += MORSE_DURATION_DICT["signal_pause"]
             else:
-                # print(f"{symbol=} {duration=}")
-                first_symbol_in_word = False
-
-            first_signal_in_symbol = True
-            for signal in symbol:
-                duration += MORSE_DURATION_DICT[signal]
-                if not first_signal_in_symbol:
-                    duration += MORSE_DURATION_DICT["signal_pause"]
-                    # print(f"{symbol=}  {signal=} {first_signal_in_symbol= } {duration=}")
-                else:
-                    # print(f"{symbol=}  {signal=} {first_signal_in_symbol= } {duration=}")
-                    first_signal_in_symbol = False
-
+                first_signal_in_symbol = False
     return duration
 
 
@@ -172,7 +175,7 @@ time.sleep(dit_length / 1000)
 play(dah)
 """ 
 
-
+"""
 first_symbol_in_word = True
 for symbol in morse_message:
     # print(f"{symbol=}")
@@ -201,4 +204,4 @@ for symbol in morse_message:
                 # print("play: -" )
             else:
                 pass # wrong input                
-               
+"""               
