@@ -119,6 +119,7 @@ def symbol_duration(symbol):
     """
     tap symbol relative  duration
     """
+    
     duration = 0
     if symbol == "/":
         duration += TAP_DURATION_DICT["word_pause"]
