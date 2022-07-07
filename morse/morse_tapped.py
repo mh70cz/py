@@ -182,7 +182,7 @@ for symbol in morse_message:
         # print("... wake" , end =" ") 
     first_symbol_in_word = False
     if symbol == "/":
-        time.sleep((MORSE_DURATION_DICT["/"] * dit_length)/1000)
+        time.sleep((MORSE_DURATION_DICT["word_pause"] * dit_length)/1000)
         first_symbol_in_word = True
     else:
         first_signal_in_symbol = True

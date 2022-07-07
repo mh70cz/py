@@ -121,7 +121,7 @@ def message_duration(tap_message):
             first_signal_in_halfsymbol = True
             for signal in symbol:
                 if signal == " ":
-                    duration += TAP_DURATION_DICT[" "]
+                    duration += TAP_DURATION_DICT["halfsymbol_pause"]
                     # print(f"{symbol=}  {signal=} {first_signal_in_halfsymbol= } {duration=}")
                     first_signal_in_halfsymbol = True
                 else:
@@ -155,7 +155,7 @@ for symbol in tap_message:
         time.sleep(TAP_DURATION_DICT["symbol_pause"] * TAP_LENGTH / 1000)
     first_symbol_in_word = False
     if symbol == "/":
-        time.sleep(TAP_DURATION_DICT["/"] * TAP_LENGTH / 1000)
+        time.sleep(TAP_DURATION_DICT["word_pause"] * TAP_LENGTH / 1000)
         first_symbol_in_word = True
     else:
         first_signal_in_halfsymbol = True
