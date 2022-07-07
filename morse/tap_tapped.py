@@ -1,8 +1,11 @@
 # TAP CODE
 # signal: "."
 # halfsymbol: sequence of signals min 1 max 5
-# symbol: 2 halfsymbols separated by " " e.g.  '.. .....' (letter 'J')
-# tap message: sequence of symbols and separators "/"
+# symbol: 
+#     2 halfsymbols separated by " " e.g.  '.. .....' (letter 'J')
+#     word separator "/"
+# tap message: sequence of symbols 
+#
 
 import time
 from pydub import AudioSegment
@@ -40,11 +43,11 @@ TAP_CODE_DICT = {
 }
 
 TAP_DURATION_DICT = {
-    ".": 1,
-    "signal_pause": 1, 
-    " ": 2,  # halfsymbol_separator i.e. inner pause
-    "symbol_pause": 4,
-    "/": 7,  # word pause
+    ".": 1,  # tap
+    "signal_pause": 1, # tap-tap pause
+    "halfsymbol_pause": 2,  # halfsymbol_separator " " (space)
+    "symbol_pause": 4,  # symbol separator
+    "word_pause": 7,  # word separator
 }
 
 DEFAULT_FILL_IN_SYMBOL = "..... ....."  # letter Z
@@ -93,8 +96,9 @@ def tap_duration(tap_message):
 
 
 TAP_SOUND_FLDR = "C:/git/py/morse"
-TAP_SOUND_FILE = "tap_200.wav"  # tap sound 200 ms (i.e. TAP_LENGTH) 
+TAP_SOUND_FILE = "tap_200.wav"  # tap sound 200 ms (i.e. TAP_LENGTH)
 TAP_LENGTH = 200  # tap length in ms
+
 
 def message_duration(tap_message):
     """
@@ -104,52 +108,51 @@ def message_duration(tap_message):
     first_symbol_in_word = True
     for symbol in tap_message:
         if symbol == "/":
-            duration += TAP_DURATION_DICT['/']
-            # print(f"{symbol=} {dusurrogatetap morration=}") 
+            duration += TAP_DURATION_DICT["word_pause"]
+            # print(f"{symbol=} {dusurrogatetap morration=}")
             first_symbol_in_word = True
         else:
             if not first_symbol_in_word:
-                duration += TAP_DURATION_DICT["symbol_pause"]  
-                # print(f"{symbol=} {duration=}")  
+                duration += TAP_DURATION_DICT["symbol_pause"]
+                # print(f"{symbol=} {duration=}")
             else:
-                # print(f"{symbol=} {duration=}") 
-                first_symbol_in_word = False     
+                # print(f"{symbol=} {duration=}")
+                first_symbol_in_word = False
             first_signal_in_halfsymbol = True
             for signal in symbol:
                 if signal == " ":
-                    duration += TAP_DURATION_DICT[' ']
+                    duration += TAP_DURATION_DICT[" "]
                     # print(f"{symbol=}  {signal=} {first_signal_in_halfsymbol= } {duration=}")
                     first_signal_in_halfsymbol = True
                 else:
-                    duration += TAP_DURATION_DICT['.']
+                    duration += TAP_DURATION_DICT["."]
                     if not first_signal_in_halfsymbol:
-                        duration += TAP_DURATION_DICT['signal_pause']
+                        duration += TAP_DURATION_DICT["signal_pause"]
                         # print(f"{symbol=}  {signal=} {first_signal_in_halfsymbol= } {duration=}")
                     else:
                         # print(f"{symbol=}  {signal=} {first_signal_in_halfsymbol= } {duration=}")
                         first_signal_in_halfsymbol = False
 
-    return(duration)  
+    return duration
+
 
 TAP_SOUND_FLDR = "C:/git/py/morse"
 TAP_SOUND_FILE = "tap_200.wav"  # tap sound 200 ms
 folder = Path(TAP_SOUND_FLDR)
-src_path = folder / TAP_SOUND_FILE  
+src_path = folder / TAP_SOUND_FILE
 
 tap = AudioSegment.from_file(src_path, format="wav")
 
-txt_message = "What hath God wrought" # first public morse message
+txt_message = "What hath God wrought"  # first public morse message
 tap_message = txt_to_tap(txt_message)
 duration = message_duration(tap_message)
-print (tap_message , duration)
+print(tap_message, duration)
 
 first_symbol_in_word = True
 for symbol in tap_message:
     print(f"{symbol=}")
     if not first_symbol_in_word:
-        print("going to sleep for the next symbol..." , end =" ")
         time.sleep(TAP_DURATION_DICT["symbol_pause"] * TAP_LENGTH / 1000)
-        print("... wake" , end =" ") 
     first_symbol_in_word = False
     if symbol == "/":
         time.sleep(TAP_DURATION_DICT["/"] * TAP_LENGTH / 1000)
@@ -162,9 +165,8 @@ for symbol in tap_message:
             first_signal_in_halfsymbol = False
             if sigsep == " ":
                 first_signal_in_halfsymbol = True
-                time.sleep(TAP_DURATION_DICT[" "] * TAP_LENGTH / 1000)
+                time.sleep(TAP_DURATION_DICT["halfsymbol_pause"] * TAP_LENGTH / 1000)
             elif sigsep == ".":
                 play(tap)
             else:
-                pass # wrong input                
-            
+                pass  # wrong input
