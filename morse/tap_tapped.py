@@ -1,4 +1,5 @@
 # TAP CODE
+# tapped tap code message
 # signal: "."
 # halfsymbol: sequence of signals min 1 max 5
 # symbol:
@@ -132,12 +133,49 @@ def symbol_duration(symbol):
             else:
                 if signal != ".":
                     raise ValueError(f"{signal} is wrong signal")
-                duration += TAP_DURATION_DICT["."]
                 if not first_signal_in_halfsymbol:
                     duration += TAP_DURATION_DICT["signal_pause"]
                 else:
                     first_signal_in_halfsymbol = False
+                duration += TAP_DURATION_DICT["."]
     return duration
+
+
+def tap_tap_message(tap_message):
+    """ 
+    tap (verb) tap (adj) message 
+    """
+    symbol = tap_message[:1][0]
+    tap_tap_symbol(symbol)
+    for symbol in tap_message[1:]:
+        time.sleep(TAP_DURATION_DICT["symbol_pause"] * TAP_LENGTH / 1000)
+        tap_tap_symbol(symbol)
+
+def tap_tap_symbol(symbol):
+    """
+    tap (verb) tap (adj) symbol
+    """
+    if symbol == "/":
+        time.sleep(TAP_DURATION_DICT["word_pause"] * TAP_LENGTH / 1000)
+    else:
+        first_signal_in_halfsymbol = True
+        for signal in symbol:
+            if signal == " ": # is not signal per se, but ...
+                time.sleep(TAP_DURATION_DICT["halfsymbol_pause"] * TAP_LENGTH / 1000)
+                first_signal_in_halfsymbol = True
+            else:
+                if not first_signal_in_halfsymbol:
+                    time.sleep(TAP_DURATION_DICT["signal_pause"] * TAP_LENGTH / 1000)
+                else:
+                    first_signal_in_halfsymbol = False
+                if signal == ".":
+                    play(tap)                
+                else:
+                    # pass # silently ignore a wrong input   
+                    raise ValueError(f"{signal} is wrong signal")
+
+
+
 
 
 TAP_SOUND_FLDR = "C:/git/py/morse"
@@ -147,32 +185,11 @@ src_path = folder / TAP_SOUND_FILE
 
 tap = AudioSegment.from_file(src_path, format="wav")
 
+""" symbol = "... ....."
+tap_tap_symbol(symbol) """
+
 txt_message = "What hath God wrought"  # first public morse message
 tap_message = txt_to_tap(txt_message)
 duration = message_duration(tap_message)
 print(tap_message, duration)
-
-""" 
-first_symbol_in_word = True
-for symbol in tap_message:
-    print(f"{symbol=}")
-    if not first_symbol_in_word:
-        time.sleep(TAP_DURATION_DICT["symbol_pause"] * TAP_LENGTH / 1000)
-    first_symbol_in_word = False
-    if symbol == "/":
-        time.sleep(TAP_DURATION_DICT["word_pause"] * TAP_LENGTH / 1000)
-        first_symbol_in_word = True
-    else:
-        first_signal_in_halfsymbol = True
-        for sigsep in symbol:  # sigsep: signal or separator
-            if not first_signal_in_halfsymbol:
-                time.sleep(TAP_DURATION_DICT["signal_pause"] * TAP_LENGTH / 1000)
-            first_signal_in_halfsymbol = False
-            if sigsep == " ":
-                first_signal_in_halfsymbol = True
-                time.sleep(TAP_DURATION_DICT["halfsymbol_pause"] * TAP_LENGTH / 1000)
-            elif sigsep == ".":
-                play(tap)
-            else:
-                pass  # wrong input
- """
+tap_tap_message(tap_message)

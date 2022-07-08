@@ -1,3 +1,5 @@
+# MORSE CODE 
+# tapped morese code message 
 # signal: "." (aka dit) or "-" (aka dah)
 # symbol: 
 #     sequence of signals e.g. '.---'  (letter 'J')
@@ -160,13 +162,56 @@ def get_tapped_dit_dah(dit_length=DIT_BASE_LENGTH):
 
     return (dit, dah, dit_length)
 
+def tap_morse_message(morse_message):
+    """
+    tap morse message
+    """
+
+    symbol = morse_message[:1][0]
+    tap_morse_symbol(symbol)
+    for symbol in morse_message[1:]:
+        time.sleep(MORSE_DURATION_DICT["symbol_pause"] * dit_length/1000)
+        tap_morse_symbol(symbol)
+
+def tap_morse_symbol(symbol):
+    """
+    tap morse message
+    """
+    if symbol == "/":
+        time.sleep((MORSE_DURATION_DICT["word_pause"] * dit_length)/1000)
+    else:
+        first_signal_in_symbol = True
+        for signal in symbol:
+            if not first_signal_in_symbol:
+                time.sleep(MORSE_DURATION_DICT["signal_pause"] * dit_length /1000)
+            else:
+                first_signal_in_symbol = False
+            if signal == ".":
+                play(dit)                
+                # print("play: ." )
+            elif signal == "-":
+                play(dah) 
+                # print("play: -" )
+            else:
+                # pass # silently ignore a wrong input                  
+                raise ValueError(f"{signal} is wrong signal")
+            
+
+
+
+dit, dah, dit_length = get_tapped_dit_dah()
+""" 
+symbol = "-..." # letter B
+tap_morse_symbol(symbol)
+exit("explicit script termination")
+"""
 txt_message = "What hath God wrought" # first public morse message
 # txt_message ="SOS"
 morse_message = txt_to_morse(txt_message)
 duration = message_duration(morse_message)
 print (morse_message , duration)
-
-dit, dah, dit_length = get_tapped_dit_dah()
+tap_morse_message(morse_message)
+exit("explicit script termination")
 
 """ 
 print(dit_length)
@@ -175,33 +220,3 @@ time.sleep(dit_length / 1000)
 play(dah)
 """ 
 
-"""
-first_symbol_in_word = True
-for symbol in morse_message:
-    # print(f"{symbol=}")
-    if not first_symbol_in_word:
-        # print("going to sleep for the next symbol..." , end =" ")               
-        time.sleep(MORSE_DURATION_DICT["symbol_pause"] * dit_length/1000)
-        # print("... wake" , end =" ") 
-    first_symbol_in_word = False
-    if symbol == "/":
-        time.sleep((MORSE_DURATION_DICT["word_pause"] * dit_length)/1000)
-        first_symbol_in_word = True
-    else:
-        first_signal_in_symbol = True
-        for signal in symbol:
-            # print(f"{signal=}", end =" ")
-            if not first_signal_in_symbol: 
-                # print("going to sleep..." , end =" ")               
-                time.sleep(MORSE_DURATION_DICT["signal_pause"] * dit_length /1000)
-                # print("... wake" , end =" ")  
-            first_signal_in_symbol = False
-            if signal == ".":
-                play(dit)                
-                # print("play: ." )
-            elif signal == "-":
-                play(dah) 
-                # print("play: -" )
-            else:
-                pass # wrong input                
-"""               
