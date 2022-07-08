@@ -43,7 +43,7 @@ TAP_CODE_DICT = {
     " ": "/",
 }
 
-TAP_DURATION_DICT = {
+TAP_TIMING_DICT = {
     ".": 1,  # tap
     "signal_pause": 1,  # tap-tap pause
     "halfsymbol_pause": 2,  # halfsymbol_separator " " (space)
@@ -69,12 +69,12 @@ def tap_duration(tap_message):
     first_symbol_in_word = True
     for symbol in tap_message:
         if symbol == "/":
-            duration += TAP_DURATION_DICT["/"]
+            duration += TAP_TIMING_DICT["/"]
             # print(f"{symbol=} {duration=}")
             first_symbol_in_word = True
         else:
             if not first_symbol_in_word:
-                duration += TAP_DURATION_DICT["symbol_pause"]
+                duration += TAP_TIMING_DICT["symbol_pause"]
                 # print(f"{symbol=} {duration=}")
             else:
                 # print(f"{symbol=} {duration=}")
@@ -82,13 +82,13 @@ def tap_duration(tap_message):
             first_signal_in_halfsymbol = True
             for signal in symbol:
                 if signal == " ":
-                    duration += TAP_DURATION_DICT[" "]
+                    duration += TAP_TIMING_DICT[" "]
                     # print(f"{symbol=}  {signal=} {first_signal_in_halfsymbol= } {duration=}")
                     first_signal_in_halfsymbol = True
                 else:
-                    duration += TAP_DURATION_DICT["."]
+                    duration += TAP_TIMING_DICT["."]
                     if not first_signal_in_halfsymbol:
-                        duration += TAP_DURATION_DICT["signal_pause"]
+                        duration += TAP_TIMING_DICT["signal_pause"]
                         # print(f"{symbol=}  {signal=} {first_signal_in_halfsymbol= } {duration=}")
                     else:
                         # print(f"{symbol=}  {signal=} {first_signal_in_halfsymbol= } {duration=}")
@@ -110,7 +110,7 @@ def message_duration(tap_message):
     symbol = tap_message[:1][0]
     duration += symbol_duration(symbol)
     for symbol in tap_message[1:]:
-        duration += TAP_DURATION_DICT["symbol_pause"]  
+        duration += TAP_TIMING_DICT["symbol_pause"]  
         duration += symbol_duration(symbol)
     return duration
 
@@ -123,21 +123,21 @@ def symbol_duration(symbol):
     
     duration = 0
     if symbol == "/":
-        duration += TAP_DURATION_DICT["word_pause"]
+        duration += TAP_TIMING_DICT["word_pause"]
     else:
         first_signal_in_halfsymbol = True
         for signal in symbol:
             if signal == " ": # is not signal per se, but ...
-                duration += TAP_DURATION_DICT["halfsymbol_pause"]
+                duration += TAP_TIMING_DICT["halfsymbol_pause"]
                 first_signal_in_halfsymbol = True
             else:
                 if signal != ".":
                     raise ValueError(f"{signal} is wrong signal")
                 if not first_signal_in_halfsymbol:
-                    duration += TAP_DURATION_DICT["signal_pause"]
+                    duration += TAP_TIMING_DICT["signal_pause"]
                 else:
                     first_signal_in_halfsymbol = False
-                duration += TAP_DURATION_DICT["."]
+                duration += TAP_TIMING_DICT["."]
     return duration
 
 
@@ -148,7 +148,7 @@ def tap_tap_message(tap_message):
     symbol = tap_message[:1][0]
     tap_tap_symbol(symbol)
     for symbol in tap_message[1:]:
-        time.sleep(TAP_DURATION_DICT["symbol_pause"] * TAP_LENGTH / 1000)
+        time.sleep(TAP_TIMING_DICT["symbol_pause"] * TAP_LENGTH / 1000)
         tap_tap_symbol(symbol)
 
 def tap_tap_symbol(symbol):
@@ -156,16 +156,16 @@ def tap_tap_symbol(symbol):
     tap (verb) tap (adj) symbol
     """
     if symbol == "/":
-        time.sleep(TAP_DURATION_DICT["word_pause"] * TAP_LENGTH / 1000)
+        time.sleep(TAP_TIMING_DICT["word_pause"] * TAP_LENGTH / 1000)
     else:
         first_signal_in_halfsymbol = True
         for signal in symbol:
             if signal == " ": # is not signal per se, but ...
-                time.sleep(TAP_DURATION_DICT["halfsymbol_pause"] * TAP_LENGTH / 1000)
+                time.sleep(TAP_TIMING_DICT["halfsymbol_pause"] * TAP_LENGTH / 1000)
                 first_signal_in_halfsymbol = True
             else:
                 if not first_signal_in_halfsymbol:
-                    time.sleep(TAP_DURATION_DICT["signal_pause"] * TAP_LENGTH / 1000)
+                    time.sleep(TAP_TIMING_DICT["signal_pause"] * TAP_LENGTH / 1000)
                 else:
                     first_signal_in_halfsymbol = False
                 if signal == ".":

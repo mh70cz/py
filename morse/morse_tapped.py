@@ -61,7 +61,7 @@ MORSE_CODE_DICT = {
 }
 
 
-MORSE_DURATION_DICT = {
+MORSE_TIMING_DICT = {
     ".": 1,  # dit
     "-": 3,  # dah
     "signal_pause": 1,  # [dit|dah]-[dit|dah] pause
@@ -91,7 +91,7 @@ def message_duration(morse_message):
     symbol = morse_message[:1][0]
     duration += symbol_duration(symbol)
     for symbol in morse_message[1:]:
-        duration += MORSE_DURATION_DICT["symbol_pause"]  
+        duration += MORSE_TIMING_DICT["symbol_pause"]  
         duration += symbol_duration(symbol)
     return duration
 
@@ -103,15 +103,15 @@ def symbol_duration(symbol):
 
     duration = 0
     if symbol == "/":
-        duration += MORSE_DURATION_DICT["word_pause"]
+        duration += MORSE_TIMING_DICT["word_pause"]
     else:
         first_signal_in_symbol = True
         for signal in symbol:            
             if signal not in [".","-"]:
                 raise ValueError(f"{signal} is wrong signal")
-            duration += MORSE_DURATION_DICT[signal]
+            duration += MORSE_TIMING_DICT[signal]
             if not first_signal_in_symbol:
-                duration += MORSE_DURATION_DICT["signal_pause"]
+                duration += MORSE_TIMING_DICT["signal_pause"]
             else:
                 first_signal_in_symbol = False
     return duration
@@ -130,7 +130,7 @@ def tap_morse_message(morse_message):
     symbol = morse_message[:1][0]
     tap_morse_symbol(symbol)
     for symbol in morse_message[1:]:
-        time.sleep(MORSE_DURATION_DICT["symbol_pause"] * DIT_LENGTH/1000)
+        time.sleep(MORSE_TIMING_DICT["symbol_pause"] * DIT_LENGTH/1000)
         tap_morse_symbol(symbol)
 
 def tap_morse_symbol(symbol):
@@ -138,12 +138,12 @@ def tap_morse_symbol(symbol):
     tap morse message
     """
     if symbol == "/":
-        time.sleep((MORSE_DURATION_DICT["word_pause"] * DIT_LENGTH)/1000)
+        time.sleep((MORSE_TIMING_DICT["word_pause"] * DIT_LENGTH)/1000)
     else:
         first_signal_in_symbol = True
         for signal in symbol:
             if not first_signal_in_symbol:
-                time.sleep(MORSE_DURATION_DICT["signal_pause"] * DIT_LENGTH /1000)
+                time.sleep(MORSE_TIMING_DICT["signal_pause"] * DIT_LENGTH /1000)
             else:
                 first_signal_in_symbol = False
             if signal == ".":
