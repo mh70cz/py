@@ -8,9 +8,9 @@
 # timing as of: https://morsecode.world/international/timing.html
 
 import time
-from pydub import AudioSegment
+from get_dit_dah import get_tapped_dit_dah
 from pydub.playback import play
-from pathlib import Path
+
 
 
 MORSE_CODE_DICT = {
@@ -72,6 +72,8 @@ MORSE_DURATION_DICT = {
 
 DEFAULT_FILL_IN_SYMBOL = ".-.-.-"  # . (dot)
 
+DIT_LENGTH = 200  # dit length in ms
+
 def txt_to_morse(txt_message, fill_in_symbol=DEFAULT_FILL_IN_SYMBOL):
     """ 
     
@@ -120,48 +122,6 @@ TAP_SOUND_FILE = "tap_200.wav"  # tap sound 200 ms (i.e. DIT_BASE_LENGTH)
 DIT_BASE_LENGTH = 200  # base and minimum dit length in ms
 
 
-def get_tapped_dit_dah(dit_length=DIT_BASE_LENGTH):
-    """
-    
-    """
-    folder = Path(TAP_SOUND_FLDR)
-    src_path = folder / TAP_SOUND_FILE   # tap sound 200 ms (i.e. DIT_BASE_LENGTH) 
-
-    tap = AudioSegment.from_file(src_path, format="wav")
-
-    if dit_length < DIT_BASE_LENGTH:
-        dit_length = DIT_BASE_LENGTH
-        # TODO exception: tap_sound must be eq DIT_BASE_LENGTH
-        # TODO exception: dit_length must be >= DIT_BASE_LENGTH
-
-    if dit_length == DIT_BASE_LENGTH:
-        dit = tap
-        dah = tap * 3
-    else:
-        silence_len_dit = dit_length - DIT_BASE_LENGTH
-        silence_len_dah_middle = 3 * (dit_length - DIT_BASE_LENGTH) // 4
-        silence_len_dah_end = 3 * (dit_length - DIT_BASE_LENGTH) - (
-            2 * silence_len_dah_middle
-        )
-        silence_dit = AudioSegment.silent(duration=silence_len_dit)
-        silence_dah_middle = AudioSegment.silent(duration=silence_len_dah_middle)
-        silence_dah_end = AudioSegment.silent(duration=silence_len_dah_end)
-        dit = tap + silence_dit
-        dah = (
-            tap + silence_dah_middle + tap + silence_dah_middle + tap + silence_dah_end
-        )
-        # print(f"{silence_len_dit=} {silence_len_dah_middle=} {silence_len_dah_end=}")
-
-    # print(f"{len(dit)=} , {len(dah)=}")
-
-    # play(dit)
-    # time.sleep(dit_length / 1000)
-    # play(dah)
-    # time.sleep(dit_length / 1000)
-    # play(dit)
-
-    return (dit, dah, dit_length)
-
 def tap_morse_message(morse_message):
     """
     tap morse message
@@ -170,7 +130,7 @@ def tap_morse_message(morse_message):
     symbol = morse_message[:1][0]
     tap_morse_symbol(symbol)
     for symbol in morse_message[1:]:
-        time.sleep(MORSE_DURATION_DICT["symbol_pause"] * dit_length/1000)
+        time.sleep(MORSE_DURATION_DICT["symbol_pause"] * DIT_LENGTH/1000)
         tap_morse_symbol(symbol)
 
 def tap_morse_symbol(symbol):
@@ -178,12 +138,12 @@ def tap_morse_symbol(symbol):
     tap morse message
     """
     if symbol == "/":
-        time.sleep((MORSE_DURATION_DICT["word_pause"] * dit_length)/1000)
+        time.sleep((MORSE_DURATION_DICT["word_pause"] * DIT_LENGTH)/1000)
     else:
         first_signal_in_symbol = True
         for signal in symbol:
             if not first_signal_in_symbol:
-                time.sleep(MORSE_DURATION_DICT["signal_pause"] * dit_length /1000)
+                time.sleep(MORSE_DURATION_DICT["signal_pause"] * DIT_LENGTH /1000)
             else:
                 first_signal_in_symbol = False
             if signal == ".":
@@ -199,7 +159,7 @@ def tap_morse_symbol(symbol):
 
 
 
-dit, dah, dit_length = get_tapped_dit_dah()
+dit, dah = get_tapped_dit_dah(DIT_LENGTH)
 """ 
 symbol = "-..." # letter B
 tap_morse_symbol(symbol)
@@ -211,9 +171,9 @@ morse_message = txt_to_morse(txt_message)
 duration = message_duration(morse_message)
 print (morse_message , duration)
 tap_morse_message(morse_message)
-exit("explicit script termination")
 
 """ 
+exit("explicit script termination")
 print(dit_length)
 play(dit)
 time.sleep(dit_length / 1000)
