@@ -24,3 +24,10 @@ async def read_items():
     </html>
     """
     return HTMLResponse(content=html_content, status_code=200)
+
+
+    
+@router.get("/tap")
+async def root():
+    msg = "tap test"
+    return {"message": msg}
