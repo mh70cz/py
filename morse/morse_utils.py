@@ -55,8 +55,7 @@ class Morse:
         "-": 3,  # dah
         "signal_pause": 1,  # [dit|dah]-[dit|dah] pause
         "symbol_pause": 3,  # symbol separator
-        "word_pause": 1,  # word separator "/" is treated as a symbol
-        # total length  symbol_pause + word_pause + symbol_pause = 7
+        "word_pause": 7,  # word separator "/" 
     }
 
     @classmethod   
@@ -110,7 +109,7 @@ class Morse:
         return duration
 
     @classmethod 
-    def message_duration(cls, morse_message: List[str]) -> int:
+    def message_duration_old(cls, morse_message: List[str]) -> int:
         """
         relative duration of a morse message
         """
@@ -126,6 +125,24 @@ class Morse:
             duration += cls.MORSE_TIMING_DICT["symbol_pause"]      
         return duration        
 
+    @classmethod
+    def message_duration(cls, morse_message: List[str]) -> int:
+        """
+        relative duration of a morse message
+        """
+        duration = 0
+        first_symbol_in_word = True
+        for symbol in morse_message:
+            duration += cls.symbol_duration(symbol)
+            if symbol == "/":
+                first_symbol_in_word = True
+                continue
+            if not first_symbol_in_word:
+                duration += cls.MORSE_TIMING_DICT["symbol_pause"]
+            else:                
+                first_symbol_in_word = False
+        return duration
+
 if __name__ == "__main__":
     from os import system
     # txt_message = "What hath God wrought" # the first public morse message
@@ -133,7 +150,7 @@ if __name__ == "__main__":
     # txt_message = "Paris "
     # txt_message = "Paris is nice"
     #txt_message = "fill*in & symbol"
-    txt_message = "dog"
+    txt_message = "e e"
 
 
     #system('cls')

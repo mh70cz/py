@@ -7,9 +7,10 @@ txt_message_1 = "Dog"
 morse_message_1 = ['-..', '---', '--.']
 message_duration_1 = 33
 
-txt_message_2 = "Paris is nice" 
-morse_message_2 = ['.--.', '.-', '.-.', '..', '...', '/', '..', '...', '/', '-.', '..', '-.-.', '.']
-message_duration_2 = 97
+# leading, inner, and trailing word pause
+txt_message_2 = " Paris is nice " 
+morse_message_2 = ['/','.--.', '.-', '.-.', '..', '...', '/', '..', '...', '/', '-.', '..', '-.-.', '.','/']
+message_duration_2 = 111
 
 # the first public morse message
 txt_message_3 = "What hath God wrought" 
@@ -58,7 +59,7 @@ def test_morse_to_txt(morse_message, expected_raw):
         ("-.-.", 11),
         ("...", 5),
         ("---", 11),
-        ("/", 1),  # word separator "/" is treated as a symbol
+        ("/", 7),  # word separator "/" is treated as a symbol
         # total length  symbol_pause + word_pause + symbol_pause = 7
     ],
 )
