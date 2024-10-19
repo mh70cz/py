@@ -1,0 +1,161 @@
+{
+	"info": {
+		"_postman_id": "02247179-dd7a-4c8b-ade2-9fd584c8a545",
+		"name": "ZZA_LoopBack",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34471460"
+	},
+	"item": [
+		{
+			"name": "REST_LoopBack",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "rquBody",
+							"value": "Request body example",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/rest?param=LoopBackParamExample",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"rest"
+					],
+					"query": [
+						{
+							"key": "param",
+							"value": "LoopBackParamExample"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SOAP_LoopBack",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n                  xmlns:spy=\"spyne.examples.echo.soap\">\r\n   <soapenv:Header/>\r\n   <soapenv:Body>\r\n      <spy:echo>\r\n         <spy:request>Hello World xxx </spy:request>\r\n      </spy:echo>\r\n   </soapenv:Body>\r\n</soapenv:Envelope>"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/soap",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"soap"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "REST_LoopBack_scripted",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const baseUrl = \"http://127.0.0.1:8000\" \r",
+							"\r",
+							"let restUrl = baseUrl + \"/rest\"\r",
+							"\r",
+							"pm.collectionVariables.set(\"restUrl\",\"restUrl\");\r",
+							"\r",
+							"pm.sendRequest({\r",
+							"    url: `${restUrl}`,\r",
+							"    method: 'POST', // You can use 'POST', 'PUT', 'DELETE', etc.\r",
+							"    header: {\r",
+							"        //'Authorization': 'Bearer YOUR_ACCESS_TOKEN', // If authentication is needed\r",
+							"        'Content-Type': 'application/json'\r",
+							"    },\r",
+							"    body: {\r",
+							"        mode: 'raw',\r",
+							"        raw: JSON.stringify({\r",
+							"            // Your JSON payload for POST/PUT requests\r",
+							"            \"greet\": \"Hello\"\r",
+							"        })\r",
+							"    }\r",
+							"}, function (err, res) {\r",
+							"    if (err) {\r",
+							"        console.error('Error sending REST request:', err);\r",
+							"    } else {\r",
+							"        console.log('REST Response:', res);\r",
+							"        // You can parse and use the response here\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"pm.execution.skipRequest() ;\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/xxx",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"xxx"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "restUrl",
+			"value": ""
+		}
+	]
+}
